@@ -15,20 +15,22 @@
         <h1>
             Log In
         </h1>
-        <div class="row">
-            <input type="text" class="text-input" id="username" placeholder="Username">
-        </div>
+        <form onsubmit="return false">
+            <div class="row">
+                <input type="text" class="text-input" id="user-name" placeholder="Username">
+            </div>
 
-        <div class="row">
-            <input type="password" class="text-input" id="password" placeholder="Password">
-        </div>
+            <div class="row">
+                <input type="password" class="text-input" id="pass-word" placeholder="Password">
+            </div>
 
-        <div class="row">
-            <input type="submit" id="login-submit">
-        </div>
-
+            <div class="row">
+                <input type="submit" id="login-submit" onclick="authenticateUser()">
+            </div>
+        </form>
     </div>
 
 </body>
+<script src="{{ url_for('static',filename='javascript/login.js') }}"></script>
 
 </html>

@@ -1,6 +1,7 @@
 from enum import unique
 from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import backref, relationship
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///university.sqlite"
@@ -15,6 +16,7 @@ class Students(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
     name = db.Column(db.String, unique=False, nullable=False) 
     user_id = db.Column(db.Integer, db.ForeignKey('Users.id'),unique=True,nullable=False)
+    user = db.relationship('Users',backref=db.backref('students',lazy=True))
 
 class Enrollment(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 

@@ -1,3 +1,4 @@
+from enum import unique
 from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
@@ -5,6 +6,35 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///university.sqlite"
 db = SQLAlchemy(app)
 
+class Users(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    username = db.Column(db.String, unique=True, nullable=False) 
+    password = db.Column(db.String, unique=False, nullable=False)
+
+class Students(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    name = db.Column(db.String, unique=False, nullable=False) 
+    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'),unique=True,nullable=False)
+
+class Enrollment(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    class_id = db.Column(db.Integer, db.ForeignKey('Classes.id'),unique=True, nullable=False) 
+    student_id = db.Column(db.Integer, db.ForeignKey('Students.id'),unique=True, nullable=False)
+    grade = db.Column(db.Integer, unique=False, nullable=True)
+
+class Classes(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    courseName = db.Column(db.String, unique=True, nullable=False) 
+    teacher_id = db.Column(db.Integer, db.ForeignKey('Teachers.id'),unique=True, nullable=False) 
+    numberEnrolled = db.Column(db.Integer, unique=False, nullable=False) 
+    capacity = db.Column(db.Integer, unique=False, nullable=False)
+    time = db.Column(db.String, unique=False, nullable=False) 
+
+class Teachers(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    name = db.Column(db.String, unique=False, nullable=False) 
+    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'),unique=True, nullable=False)
+    
 
 @app.route('/', endpoint='login')
 def index():

@@ -19,6 +19,7 @@ class Students(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
     name = db.Column(db.String, unique=False, nullable=False) 
     user_id = db.Column(db.Integer, db.ForeignKey('Users.id'),unique=True,nullable=False)
+    
     user = db.relationship('Users',backref=db.backref('students',lazy=True))
 
     def __repr__(self): 

@@ -1,36 +1,27 @@
 from server import Users,Teachers,Classes,Enrollment,Students,db
 
-Jose = Users('JSantos', 'Jsantos123') 
+Jose = Users(id = 1, username='JSantos', password='Jsantos123') 
 db.session.add(Jose) 
 
-Betty = Users('BBrown', 'BBrown123') 
+Betty = Users(id = 2,username='BBrown', password='BBrown123') 
 db.session.add(Betty) 
 
-John = Users('JStuart', 'JStuart123') 
+John = Users(id = 3,username='JStuart', password='JStuart123') 
 db.session.add(John) 
 
-Li = Users('LCheng', 'LCheng123') 
+Li = Users(id = 4,username='LCheng', password='LCheng123') 
 db.session.add(Li) 
 
-Nancy = Users('NLittle', 'NLittle123') 
+Nancy = Users(id = 5,username='NLittle',password= 'NLittle123') 
 db.session.add(Nancy) 
 
-Jose = Users('JSantos', 'Jsantos123') 
-db.session.add(Jose) 
+Mindy = Users(id = 6,username='MNorris',password= 'MNorris123') 
+db.session.add(Mindy) 
 
-Jose = Users('JSantos', 'Jsantos123') 
-db.session.add(Jose) 
+Aditya = Users(id = 7,username='ARanganath',password= 'ARanganath123') 
+db.session.add(Aditya) 
 
-Jose = Users('JSantos', 'Jsantos123') 
-db.session.add(Jose) 
-
-Jose = Users('JSantos', 'Jsantos123') 
-db.session.add(Jose) 
-
-Jose = Users('JSantos', 'Jsantos123') 
-db.session.add(Jose) 
-
-Jose = Users('JSantos', 'Jsantos123') 
-db.session.add(Jose) 
+Yi = Users(id = 8,username='YChen',password= 'YChen123') 
+db.session.add(Yi) 
 
 db.session.commit() 

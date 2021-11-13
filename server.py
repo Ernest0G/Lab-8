@@ -2,10 +2,16 @@ from enum import unique
 from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref, relationship
+from flask_login import current_user, login_user
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///university.sqlite"
 db = SQLAlchemy(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+app.secret_key='%D*G-JaNdRgUkXp2'
 
 class Users(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
@@ -14,6 +20,9 @@ class Users(db.Model):
 
     def __repr__(self): 
         return '<Users %r>' % self.title
+
+    def checkPassword(self,password):
+        return self.password == password
 
 class Students(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
@@ -45,9 +54,20 @@ class Teachers(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('Users.id'),unique=True, nullable=False)
     
 
-@app.route('/', endpoint='login')
+
+
+@app.route('/', endpoint='landing')
 def index():
     return render_template('login.html')
+
+@app.route('/login', methods =['POST'], endpoint='login')
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+@login_manager.user_loader
+def loadUser(id):
+    return Users.get_id(id)
 
 
 if __name__ == '__main__':

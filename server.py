@@ -1,8 +1,8 @@
 from enum import unique
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref, relationship
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, LoginManager
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///university.sqlite"
@@ -66,8 +66,8 @@ def login():
         return redirect(url_for('index'))
 
 @login_manager.user_loader
-def loadUser(id):
-    return Users.get_id(id)
+def load_user(id):
+    return Users.get(id)
 
 
 if __name__ == '__main__':

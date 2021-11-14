@@ -1,4 +1,4 @@
-from server import Users,Teachers,Classes,Enrollment,Students,db
+from server import Users,db
 
 Jose = Users(id = 1, username='JSantos', password='Jsantos123') 
 db.session.add(Jose) 

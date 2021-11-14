@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-app.secret_key='%D*G-JaNdRgUkXp2'
+app.secret_key = 'secret-key'
 
 class Users(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
@@ -25,7 +25,7 @@ class Users(db.Model):
 
     def checkPassword(self,password):
         return self.password == password
-
+'''
 class Students(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
     name = db.Column(db.String, unique=False, nullable=False) 
@@ -55,7 +55,7 @@ class Teachers(db.Model):
     name = db.Column(db.String, unique=False, nullable=False) 
     user_id = db.Column(db.Integer, db.ForeignKey('Users.id'),unique=True, nullable=False)
     
-
+'''
 
 
 @app.route('/', endpoint='landing')

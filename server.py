@@ -63,7 +63,16 @@ def index():
 @app.route('/login', methods =['POST'], endpoint='login')
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('/index'))
+    user = Users.query.filter_by(username = request.json['username']).first()
+    if user is None or not user.check_password(request.json['password']):
+        return redirect(url_for('login'))
+    login_user(user)
+    return redirect(url_for('index'))
+
+@app.route('/index', endpoint='index')
+def index():
+    return render_template('index.html')
 
 @login_manager.user_loader
 def load_user(id):

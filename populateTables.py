@@ -24,4 +24,6 @@ db.session.add(Aditya)
 Yi = Users(id = 8,username='YChen',password= 'YChen123') 
 db.session.add(Yi) 
 
+
+
 db.session.commit() 

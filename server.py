@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request, render_template, redirect, url_for, s
 from flask_login.utils import login_required
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref, relationship
-from flask_login import current_user, login_user, LoginManager
+from flask_login import current_user, login_user, LoginManager, UserMixin
 from flask_admin import Admin
 
 app = Flask(__name__)
@@ -15,37 +15,43 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 app.secret_key = 'secret-key'
 
-class Users(db.Model): 
+class Users(UserMixin,db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
     username = db.Column(db.String, unique=True, nullable=False) 
     password = db.Column(db.String, unique=False, nullable=False)
 
     def __repr__(self): 
-        return '<Users %r>' % self.title
+        return '<Users %r>' % self.username
 
     def checkPassword(self,password):
         return self.password == password
-'''
+
 class Students(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
     name = db.Column(db.String, unique=False, nullable=False) 
-    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'),unique=True,nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),unique=True,nullable=False)
     
-    user = db.relationship('Users',backref=db.backref('students',lazy=True))
+    user = db.relationship('users',backref=db.backref('students',lazy=True ))
 
     def __repr__(self): 
-        return '<Students %r>' % self.title
+        return '<Students %r>' % self.name
 
 class Enrollment(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
-    class_id = db.Column(db.Integer, db.ForeignKey('Classes.id'),unique=True, nullable=False) 
-    student_id = db.Column(db.Integer, db.ForeignKey('Students.id'),unique=True, nullable=False)
+    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'),unique=True, nullable=False) 
+    classes = db.relationship('class',backref=db.backref('enrollment',lazy=True, ))
+    
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'),unique=True, nullable=False)
+    student = db.relationship('students',backref=db.backref('enrollment',lazy=True, ))
+    
     grade = db.Column(db.Integer, unique=False, nullable=True)
 
 class Classes(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
     courseName = db.Column(db.String, unique=True, nullable=False) 
-    teacher_id = db.Column(db.Integer, db.ForeignKey('Teachers.id'),unique=True, nullable=False) 
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=True, nullable=False)
+    teacher = db.relationship('teachers',backref=db.backref('Classes',lazy=True, ))
+
     numberEnrolled = db.Column(db.Integer, unique=False, nullable=False) 
     capacity = db.Column(db.Integer, unique=False, nullable=False)
     time = db.Column(db.String, unique=False, nullable=False) 
@@ -53,14 +59,19 @@ class Classes(db.Model):
 class Teachers(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
     name = db.Column(db.String, unique=False, nullable=False) 
-    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'),unique=True, nullable=False)
-    
-'''
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),unique=True, nullable=False)
+    user = db.relationship('users',backref=db.backref('teachers',lazy=True ))
+
 
 
 @app.route('/', endpoint='landing')
 def index():
     return render_template('login.html')
+
+@login_manager.user_loader
+def load_user(id):
+    return Users.get(id)
 
 @app.route('/login', methods =['POST'], endpoint='login')
 def login():
@@ -77,10 +88,6 @@ def login():
 @login_required
 def index():
     return render_template('index.html')
-
-@login_manager.user_loader
-def load_user(id):
-    return Users.get(id)
 
 
 if __name__ == '__main__':

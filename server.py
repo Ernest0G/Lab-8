@@ -4,6 +4,7 @@ from flask_login.utils import login_required
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref, relationship
 from flask_login import current_user, login_user, LoginManager
+from flask_admin import Admin
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///university.sqlite"

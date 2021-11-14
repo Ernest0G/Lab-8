@@ -1,5 +1,6 @@
 from enum import unique
 from flask import Flask, jsonify, request, render_template, redirect, url_for, session
+from flask_login.utils import login_required
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref, relationship
 from flask_login import current_user, login_user, LoginManager
@@ -70,7 +71,9 @@ def login():
     login_user(user)
     return redirect(url_for('index'))
 
+
 @app.route('/index', endpoint='index')
+@login_required
 def index():
     return render_template('index.html')
 

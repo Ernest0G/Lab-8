@@ -1,5 +1,5 @@
-function openTab(pageName, element) {
-    var content, tabs;
+function openTab(pageName) {
+    var content;
 
     content = document.getElementsByClassName("table-content");
 

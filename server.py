@@ -67,7 +67,7 @@ class Teachers(db.Model):
 
 @app.route('/', endpoint='landing')
 def index():
-    return render_template('login.html')
+    return render_template('studentView.html')
 
 @login_manager.user_loader
 def load_user(id):

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
+
+</head>
+
+
+<body>
+
+    <div class="student-content">
+        <div class="row">
+            <div class="tabs">
+                <button class="tablinks" onclick="openTab('my-classes',this)">My Classes</button>
+                <button class="tablinks" onclick="openTab('offered-coures',this)">Offered Classes</button>
+                <button class="tablinks" onclick=" ">Log Out</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="my-classes" class="table-content">
+                <table>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Teacher</th>
+                        <th>Time</th>
+                        <th>Students Enrolled</th>
+                    </tr>
+                    <tr>
+                        <td>Alfreds Futterkiste</td>
+                        <td>Maria Anders</td>
+                        <td>Germany</td>
+                    </tr>
+                    <tr>
+                        <td>Centro comercial Moctezuma</td>
+                        <td>Francisco Chang</td>
+                        <td>Mexico</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="offered-coures" class="table-content">
+                <table>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Teacher</th>
+                        <th>Time</th>
+                        <th>Students Enrolled</th>
+                    </tr>
+                    <tr>
+                        <td>Test</td>
+                        <td>Maria Anders</td>
+                        <td>Germany</td>
+                    </tr>
+                    <tr>
+                        <td>Centro comercial Moctezuma</td>
+                        <td>Francisco Chang</td>
+                        <td>Mexico</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+
+</body>
+
+<script src="{{ url_for('static',filename='javascript/studentView.js') }}"></script>
+
+</html>

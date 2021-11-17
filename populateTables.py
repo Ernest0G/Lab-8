@@ -1,4 +1,4 @@
-from server import Users,db
+from server import Users, Students, Teachers, Classes, Enrollment, db
 
 #User Info
 Jose = Users(id = 1, username='JSantos', password='JSantos123')
@@ -28,15 +28,17 @@ db.session.add(Susan)
 db.session.add(Ammon)
 db.session.add(admin)
 
+db.session.flush()
+
 #Student Info
-Jose_student = Students(id=1, name="Jose Santos", user=Jose)
-Betty_student = Students(id=2, name="Betty Brown", user=Betty)
-John_student = Students(id=3, name="John Stuart", user=John)
-Li_student = Students(id=4, name="Li Cheng", user=Li)
-Nancy_student = Students(id=5, name="Nancy Little", user=Nancy)
-Mindy_student = Students(id=6, name="Mindy Norris", user=Mindy)
-Aditya_student = Students(id=7, name="Aditya Ranganath", user=Aditya)
-Yi_student = Students(id=8, name="Yi Wen Chen", user=Yi)
+Jose_student = Students(id=1, name="Jose Santos", user_id=Jose.id)
+Betty_student = Students(id=2, name="Betty Brown", user_id=Betty.id)
+John_student = Students(id=3, name="John Stuart", user_id=John.id)
+Li_student = Students(id=4, name="Li Cheng", user_id=Li.id)
+Nancy_student = Students(id=5, name="Nancy Little", user_id=Nancy.id)
+Mindy_student = Students(id=6, name="Mindy Norris", user_id=Mindy.id)
+Aditya_student = Students(id=7, name="Aditya Ranganath", user_id=Aditya.id)
+Yi_student = Students(id=8, name="Yi Wen Chen", user_id=Yi.id)
 db.session.add(Jose_student) 
 db.session.add(Betty_student) 
 db.session.add(John_student) 
@@ -47,30 +49,32 @@ db.session.add(Aditya_student)
 db.session.add(Yi_student)
 
 #Teacher Info
-Ralph_teacher = Teachers(id=1, name='Ralph Jenkins', user=Ralph)
-Susan_teacher = Teachers(id=2, name='Susan Walker', user=Susan)
-Ammon_teacher = Teachers(id=3, name='Ammon Hepworth', user=Ammon)
+Ralph_teacher = Teachers(id=1, name='Ralph Jenkins', user_id=Ralph.id)
+Susan_teacher = Teachers(id=2, name='Susan Walker', user_id=Susan.id)
+Ammon_teacher = Teachers(id=3, name='Ammon Hepworth', user_id=Ammon.id)
 db.session.add(Ralph_teacher)
 db.session.add(Susan_teacher)
 db.session.add(Ammon_teacher)
 
+db.session.flush()
+
 #Class info
-math101 = Classes(id=1, courseName='Math 101', teacher = Ralph_teacher,
+math101 = Classes(id=1, courseName='Math 101', teacher_id = Ralph_teacher.id,
     numberEnrolled = 4, 
     capacity = 8,
     time = 'MWF 10:00-10:50am')
 
-physics121 = Classes(id=2, courseName='Physics 101', teacher = Susan_teacher,
+physics121 = Classes(id=2, courseName='Physics 101', teacher_id = Susan_teacher.id,
     numberEnrolled = 5, 
     capacity = 10,
     time = 'TR 11:00-11:50am')
 
-cs106 = Classes(id=3, courseName='CS 101', teacher = Ammon_teacher,
+cs106 = Classes(id=3, courseName='CS 101', teacher_id = Ammon_teacher.id,
     numberEnrolled = 4, 
     capacity = 10,
     time = 'MWF 2:00-2:50pm')
 
-cs162 = Classes(id=4, courseName='CS 162', teacher = Ammon_teacher,
+cs162 = Classes(id=4, courseName='CS 162', teacher_id = Ammon_teacher.id,
     numberEnrolled = 4, 
     capacity = 4,
     time = 'TR 3:00-3:50pm')
@@ -80,27 +84,29 @@ db.session.add(physics121)
 db.session.add(cs106)
 db.session.add(cs162)
 
+db.session.flush()
+
 #Enrollment Info
-db.session.add(Enrollment(id=1, classes=math101, student=Jose_student, grade=92))
-db.session.add(Enrollment(id=2, classes=math101, student=Betty_student, grade=65))
-db.session.add(Enrollment(id=3, classes=math101, student=John_student, grade=86))
-db.session.add(Enrollment(id=4, classes=math101, student=Li_student, grade=77))
+db.session.add(Enrollment(id=1, class_id=math101.id, student_id=Jose_student.id, grade=92))
+db.session.add(Enrollment(id=2, class_id=math101.id, student_id=Betty_student.id, grade=65))
+db.session.add(Enrollment(id=3, class_id=math101.id, student_id=John_student.id, grade=86))
+db.session.add(Enrollment(id=4, class_id=math101.id, student_id=Li_student.id, grade=77))
 
-db.session.add(Enrollment(id=5, classes=physics121, student=Nancy_student, grade=53))
-db.session.add(Enrollment(id=6, classes=physics121, student=Li_student, grade=85))
-db.session.add(Enrollment(id=7, classes=physics121, student=Mindy_student, grade=94))
-db.session.add(Enrollment(id=8, classes=physics121, student=John_student, grade=91))
-db.session.add(Enrollment(id=9, classes=physics121, student=Betty_student, grade=88))
+db.session.add(Enrollment(id=5, class_id=physics121.id, student_id=Nancy_student.id, grade=53))
+db.session.add(Enrollment(id=6, class_id=physics121.id, student_id=Li_student.id, grade=85))
+db.session.add(Enrollment(id=7, class_id=physics121.id, student_id=Mindy_student.id, grade=94))
+db.session.add(Enrollment(id=8, class_id=physics121.id, student_id=John_student.id, grade=91))
+db.session.add(Enrollment(id=9, class_id=physics121.id, student_id=Betty_student.id, grade=88))
 
-db.session.add(Enrollment(id=10, classes=cs106, student=Aditya_student, grade=93))
-db.session.add(Enrollment(id=11, classes=cs106, student=Yi_student, grade=85))
-db.session.add(Enrollment(id=12, classes=cs106, student=Nancy_student, grade=57))
-db.session.add(Enrollment(id=13, classes=cs106, student=Mindy_student, grade=68))
+db.session.add(Enrollment(id=10, class_id=cs106.id, student_id=Aditya_student.id, grade=93))
+db.session.add(Enrollment(id=11, class_id=cs106.id, student_id=Yi_student.id, grade=85))
+db.session.add(Enrollment(id=12, class_id=cs106.id, student_id=Nancy_student.id, grade=57))
+db.session.add(Enrollment(id=13, class_id=cs106.id, student_id=Mindy_student.id, grade=68))
 
-db.session.add(Enrollment(id=14, classes=cs162, student=Aditya_student, grade=99))
-db.session.add(Enrollment(id=15, classes=cs162, student=Nancy_student, grade=87))
-db.session.add(Enrollment(id=16, classes=cs162, student=Yi_student, grade=92))
-db.session.add(Enrollment(id=17, classes=cs162, student=John_student, grade=67))
+db.session.add(Enrollment(id=14, class_id=cs162.id, student_id=Aditya_student.id, grade=99))
+db.session.add(Enrollment(id=15, class_id=cs162.id, student_id=Nancy_student.id, grade=87))
+db.session.add(Enrollment(id=16, class_id=cs162.id, student_id=Yi_student.id, grade=92))
+db.session.add(Enrollment(id=17, class_id=cs162.id, student_id=John_student.id, grade=67))
 
 
 db.session.commit()

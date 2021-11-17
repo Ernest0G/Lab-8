@@ -1,45 +1,130 @@
-from flask import Flask, redirect, url_for
-from flask_admin.base import AdminIndexView
-from flask_login.login_manager import LoginManager
+from enum import unique
+from html import entities
+from flask import Flask, jsonify, request, render_template, redirect, url_for, session
+from flask_login.utils import login_required
 from flask_sqlalchemy import SQLAlchemy
-from flask_admin import Admin, AdminIndexView
-from flask_admin.contrib.sqla import ModelView
-from flask_login import UserMixin, LoginManager, current_user
+from sqlalchemy.orm import backref, relationship
+from flask_login import current_user, login_user, LoginManager, UserMixin
+from flask_admin import Admin
+from sqlalchemy.sql.elements import Null
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
-app.config['SECRET_KEY'] = 'verysecret'
-
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///university.sqlite"
 db = SQLAlchemy(app)
-login = LoginManager(app)
 
-@login.user_loader
-def load_user(user_id):
-    return Users.query.get(user_id)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+app.secret_key = 'secret-key'
+admin = Admin(app)
 
-class Users(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String)
+class Users(UserMixin,db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    username = db.Column(db.String, unique=True, nullable=False) 
+    password = db.Column(db.String, unique=False, nullable=False)
+    userLevel = db.Column(db.Integer, unique=False, nullable=False)
 
-class MyModelView(ModelView):
-    def is_accessible(self):
-        return current_user.is_authenticated
-    def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('/login'))
+    def __repr__(self): 
+        return '<Users %r>' % self.username
 
-class MyAdminIndexView(AdminIndexView):
-    def is_accessible(self):
-        if (current_user.)
-        return current_user.is_authenticated
+    def checkPassword(self,password):
+        return self.password == password
 
-admin = Admin(app, index_view = MyAdminIndexView())
-admin.add_view(MyModelView(Users, db.session))
+class Students(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    name = db.Column(db.String, unique=False, nullable=False) 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),unique=True,nullable=False)
+    
+    user = db.relationship('Users',backref=db.backref('student',lazy=True ))
 
-@app.route('/login')
-def login():
-    user = Users.query.get(1)
-    login_user(user)
-    return 'Logged in'
+    def __repr__(self): 
+        return '<Students %r>' % self.name
+
+class Enrollment(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'),unique=False, nullable=False) 
+    classes = db.relationship('Classes',backref=db.backref('enrollment',lazy=True, ))
+    
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'),unique=False, nullable=False)
+    student = db.relationship('Students',backref=db.backref('enrollment',lazy=True, ))
+    
+    grade = db.Column(db.Integer, unique=False, nullable=True)
+
+    def __repr__(self): 
+        return '<Enrollment %r>' % self.class_id
+
+class Classes(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    courseName = db.Column(db.String, unique=True, nullable=False) 
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=False, nullable=False)
+    teacher = db.relationship('Teachers',backref=db.backref('class',lazy=True, ))
+
+    numberEnrolled = db.Column(db.Integer, unique=False, nullable=False) 
+    capacity = db.Column(db.Integer, unique=False, nullable=False)
+    time = db.Column(db.String, unique=False, nullable=False) 
+
+class Teachers(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    name = db.Column(db.String, unique=False, nullable=False) 
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),unique=True, nullable=False)
+    user = db.relationship('Users',backref=db.backref('teacher',lazy=True ))
+
+
+@app.route('/')
+def index():
+    print('landing')
+    if(not current_user.is_authenticated):
+        print('not_auth')
+        return redirect(url_for('login'))
+    print('authenticated')
+    return render_template('studentView.html')
+
+
+@login_manager.user_loader
+def load_user(id):
+    return Users.(id)
+
+
+@app.route('/login', methods =['GET','POST'], endpoint='login')
+def Login():
+    print('postLogin')
+    if request.method == 'GET':
+        if(current_user.is_authenticated):
+            return redirect(url_for('studentView.html'))
+        return render_template('login.html')
+
+    if request.method == 'POST':
+        print(request.form['username'])
+        user = Users.query.filter_by(username = request.form['username'])
+
+        if user is None:
+            return redirect(url_for('login'))
+        user = user.first()
+        if not user.checkPassword(request.form['password']):
+            return redirect(url_for('login'))
+
+        login_user(user)
+        print (user.userLevel)
+        return render_template('studentView.html')
+
+@app.route('/index')
+def deez():
+    print('bofa')
+    return 'bofa'
+
+@app.route('/studentView/<userid>', methods = ['GET'],endpoint = 'studentView')
+def showStudentClasses(userid):
+    classes = db.session.query(Classes.courseName, Teachers.name, Classes.time,Classes.numberEnrolled).filter(Enrollment.class_id == Classes.id,Classes.teacher_id == Teachers.id,Enrollment.student_id == Students.id,Students.user_id == Users.id,Users.id == userid).all()
+    print(classes)
+    
+    data = []
+    for row in classes:
+        data.append(list(row))
+
+    return jsonify(data)
+    
+
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(host='localhost', port=5000, debug=True)

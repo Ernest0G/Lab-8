@@ -88,17 +88,17 @@ def login():
     return redirect(url_for('index'))
 
 
-@app.route('/index', endpoint='index')
-@login_required
-def index():
-    return render_template('index.html')
-
-@app.route('/studentView/<studentid>', methods = ['GET'],endpoint = 'studentView')
-def showStudentClasses(studentid):
-    classes = db.session.query(Classes.courseName, Teachers.name, Classes.time,Classes.numberEnrolled).filter(Enrollment.class_id == Classes.id,Classes.teacher_id == Teachers.id,Enrollment.student_id == Students.id,Students.user_id == Users.id,Users.id == studentid).all()
-       
+@app.route('/studentView/<userid>', methods = ['GET'],endpoint = 'studentView')
+def showStudentClasses(userid):
+    classes = db.session.query(Classes.courseName, Teachers.name, Classes.time,Classes.numberEnrolled).filter(Enrollment.class_id == Classes.id,Classes.teacher_id == Teachers.id,Enrollment.student_id == Students.id,Students.user_id == Users.id,Users.id == userid).all()
     print(classes)
-    return jsonify(classes)
+    
+    data = []
+    for row in classes:
+        data.append(list(row))
+
+    return jsonify(data)
+    
 
 
 if __name__ == '__main__':

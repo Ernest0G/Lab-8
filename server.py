@@ -1,4 +1,5 @@
 from enum import unique
+from html import entities
 from flask import Flask, jsonify, request, render_template, redirect, url_for, session
 from flask_login.utils import login_required
 from flask_sqlalchemy import SQLAlchemy
@@ -38,7 +39,8 @@ class Students(db.Model):
 
 class Enrollment(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
-    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'),unique=True, nullable=False) 
+
+    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'),unique=False, nullable=False) 
     classes = db.relationship('Classes',backref=db.backref('enrollment',lazy=True, ))
     
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'),unique=False, nullable=False)
@@ -87,16 +89,17 @@ def login():
     return redirect(url_for('index'))
 
 
-@app.route('/index', endpoint='index')
-@login_required
-def index():
-    return render_template('index.html')
-
-@app.route('/studentView/<studentid>', methods = ['GET'],endpoint = 'studentView')
-def showStudentClasses(studentid):
-    classes = Enrollment.query.filter_by(id = studentid)
+@app.route('/studentView/<userid>', methods = ['GET'],endpoint = 'studentView')
+def showStudentClasses(userid):
+    classes = db.session.query(Classes.courseName, Teachers.name, Classes.time,Classes.numberEnrolled).filter(Enrollment.class_id == Classes.id,Classes.teacher_id == Teachers.id,Enrollment.student_id == Students.id,Students.user_id == Users.id,Users.id == userid).all()
     print(classes)
-    return classes
+    
+    data = []
+    for row in classes:
+        data.append(list(row))
+
+    return jsonify(data)
+    
 
 
 if __name__ == '__main__':

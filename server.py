@@ -89,16 +89,29 @@ def login():
     return redirect(url_for('index'))
 
 
-@app.route('/studentView/<userid>', methods = ['GET'],endpoint = 'studentView')
+@app.route('/studentView/myClasses/<userid>', methods = ['GET'],endpoint = 'studentView/schedule')
 def showStudentClasses(userid):
     classes = db.session.query(Classes.courseName, Teachers.name, Classes.time,Classes.numberEnrolled).filter(Enrollment.class_id == Classes.id,Classes.teacher_id == Teachers.id,Enrollment.student_id == Students.id,Students.user_id == Users.id,Users.id == userid).all()
     print(classes)
     
+
     data = []
     for row in classes:
         data.append(list(row))
 
     return jsonify(data)
+
+@app.route('/studentView/offeredCourses/<userid>', methods = ['GET'],endpoint = 'studentView/courses')
+def showStudentClasses(userid):
+    classes = db.session.query(Classes.courseName, Teachers.name, Classes.time,Classes.numberEnrolled).filter(Enrollment.class_id == Classes.id,Classes.teacher_id == Teachers.id,Enrollment.student_id == Students.id,Students.user_id == Users.id,Users.id != userid).all()
+    print(classes)
+    
+
+    data = []
+    for row in classes:
+        data.append(list(row))
+
+    return 0
     
 
 

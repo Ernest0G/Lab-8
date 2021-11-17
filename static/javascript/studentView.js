@@ -13,17 +13,16 @@ function openTab(pageName) {
 
 function studentClasses(userid) {
     var xhttp = new XMLHttpRequest();
-    var url = "http://localhost:5000/studentView/" + userid;
+    var url = "http://localhost:5000/studentView/myClasses/" + userid;
 
     xhttp.open("GET", url, true);
     xhttp.send(JSON.stringify(userid));
 
     xhttp.onload = function () {
 
-        let schedule = {};
-        schedule = this.responseText;
-        console.log(schedule);
-
+        let schedule = this.responseText;
+        let scheduleParsed = JSON.parse(schedule)
+        console.log(scheduleParsed);
 
         let t = '<tbody>'
         t += '<table>'
@@ -34,11 +33,18 @@ function studentClasses(userid) {
         t += '<th>Students Enrolled</th>';
         t += '</tr>';
 
-        t += '<tr>';
-        t += '<td>' + schedule + '</td>'
+
+        for (i in scheduleParsed) {
+            t += '<tr>';
+
+            t += '<td>' + scheduleParsed[i] + '</td>';
 
 
-        t += '</tr>';
+            t += '</tr>';
+        }
+
+
+
 
 
 
@@ -52,5 +58,48 @@ function studentClasses(userid) {
 }
 
 function offeredClasses(userid) {
+    var xhttp = new XMLHttpRequest();
+    var url = "http://localhost:5000/studentView/offeredCourses/" + userid;
 
+    xhttp.open("GET", url, true);
+    xhttp.send(JSON.stringify(userid));
+
+    xhttp.onload = function () {
+
+        let schedule = [];
+        schedule = this.responseText;
+        let scheduleParsed = JSON.parse(schedule)
+        console.log(scheduleParsed);
+
+        let t = '<tbody>'
+        t += '<table>'
+        t += '<tr>';
+        t += '<th>Course Name</th>';
+        t += '<th>Teacher</th>';
+        t += '<th>Time</th>';
+        t += '<th>Students Enrolled</th>';
+        t += '<th>Add Class</th>';
+        t += '</tr>';
+
+
+        for (i in scheduleParsed) {
+            t += '<tr>';
+
+            t += '<td>' + scheduleParsed[i] + '</td>';
+
+
+            t += '</tr>';
+        }
+
+
+
+
+
+
+        t += '</table>'
+        t += '</tbody>';
+        document.getElementById('offered-courses').innerHTML = t;
+
+
+    };
 }

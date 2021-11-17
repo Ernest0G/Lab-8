@@ -139,7 +139,6 @@ def showStudentClasses(userid):
     classes = db.session.query(Classes.courseName, Teachers.name, Classes.time,Classes.numberEnrolled).filter(Enrollment.class_id == Classes.id,Classes.teacher_id == Teachers.id,Enrollment.student_id == Students.id,Students.user_id == Users.id,Users.id != userid).all()
     print(classes)
     
-
     data = []
     for row in classes:
         data.append(list(row))

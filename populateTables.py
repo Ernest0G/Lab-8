@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-from server import Users,db
-=======
 from server import Users, Students, Teachers, Classes, Enrollment, db
 
 db.drop_all()
@@ -15,12 +12,9 @@ Nancy = Users(id = 5,username='NLittle',password= 'NLittle123', userLevel=0)
 Mindy = Users(id = 6,username='MNorris',password= 'MNorris123', userLevel=0)
 Aditya = Users(id = 7,username='ARanganath',password= 'ARanganath123', userLevel=0)
 Yi = Users(id = 8,username='YChen',password= 'YChen123', userLevel=0)
->>>>>>> Stashed changes
 
 Jose = Users(id = 1, username='JSantos', password='Jsantos123') 
 db.session.add(Jose) 
-<<<<<<< Updated upstream
-=======
 db.session.add(Betty) 
 db.session.add(John) 
 db.session.add(Li) 
@@ -65,27 +59,58 @@ Ammon_teacher = Teachers(id=3, name='Ammon Hepworth', user_id=Ammon.id)
 db.session.add(Ralph_teacher)
 db.session.add(Susan_teacher)
 db.session.add(Ammon_teacher)
->>>>>>> Stashed changes
 
-Betty = Users(id = 2,username='BBrown', password='BBrown123') 
-db.session.add(Betty) 
+db.session.flush()
 
-John = Users(id = 3,username='JStuart', password='JStuart123') 
-db.session.add(John) 
+#Class info
+math101 = Classes(id=1, courseName='Math 101', teacher_id = Ralph_teacher.id,
+    numberEnrolled = 4, 
+    capacity = 8,
+    time = 'MWF 10:00-10:50am')
 
-Li = Users(id = 4,username='LCheng', password='LCheng123') 
-db.session.add(Li) 
+physics121 = Classes(id=2, courseName='Physics 101', teacher_id = Susan_teacher.id,
+    numberEnrolled = 5, 
+    capacity = 10,
+    time = 'TR 11:00-11:50am')
 
-Nancy = Users(id = 5,username='NLittle',password= 'NLittle123') 
-db.session.add(Nancy) 
+cs106 = Classes(id=3, courseName='CS 101', teacher_id = Ammon_teacher.id,
+    numberEnrolled = 4, 
+    capacity = 10,
+    time = 'MWF 2:00-2:50pm')
 
-Mindy = Users(id = 6,username='MNorris',password= 'MNorris123') 
-db.session.add(Mindy) 
+cs162 = Classes(id=4, courseName='CS 162', teacher_id = Ammon_teacher.id,
+    numberEnrolled = 4, 
+    capacity = 4,
+    time = 'TR 3:00-3:50pm')
 
-Aditya = Users(id = 7,username='ARanganath',password= 'ARanganath123') 
-db.session.add(Aditya) 
+db.session.add(math101)
+db.session.add(physics121)
+db.session.add(cs106)
+db.session.add(cs162)
 
-Yi = Users(id = 8,username='YChen',password= 'YChen123') 
-db.session.add(Yi) 
+db.session.flush()
 
-db.session.commit() 
+#Enrollment Info
+db.session.add(Enrollment(id=1, class_id=math101.id, student_id=Jose_student.id, grade=92))
+db.session.add(Enrollment(id=2, class_id=math101.id, student_id=Betty_student.id, grade=65))
+db.session.add(Enrollment(id=3, class_id=math101.id, student_id=John_student.id, grade=86))
+db.session.add(Enrollment(id=4, class_id=math101.id, student_id=Li_student.id, grade=77))
+
+db.session.add(Enrollment(id=5, class_id=physics121.id, student_id=Nancy_student.id, grade=53))
+db.session.add(Enrollment(id=6, class_id=physics121.id, student_id=Li_student.id, grade=85))
+db.session.add(Enrollment(id=7, class_id=physics121.id, student_id=Mindy_student.id, grade=94))
+db.session.add(Enrollment(id=8, class_id=physics121.id, student_id=John_student.id, grade=91))
+db.session.add(Enrollment(id=9, class_id=physics121.id, student_id=Betty_student.id, grade=88))
+
+db.session.add(Enrollment(id=10, class_id=cs106.id, student_id=Aditya_student.id, grade=93))
+db.session.add(Enrollment(id=11, class_id=cs106.id, student_id=Yi_student.id, grade=85))
+db.session.add(Enrollment(id=12, class_id=cs106.id, student_id=Nancy_student.id, grade=57))
+db.session.add(Enrollment(id=13, class_id=cs106.id, student_id=Mindy_student.id, grade=68))
+
+db.session.add(Enrollment(id=14, class_id=cs162.id, student_id=Aditya_student.id, grade=99))
+db.session.add(Enrollment(id=15, class_id=cs162.id, student_id=Nancy_student.id, grade=87))
+db.session.add(Enrollment(id=16, class_id=cs162.id, student_id=Yi_student.id, grade=92))
+db.session.add(Enrollment(id=17, class_id=cs162.id, student_id=John_student.id, grade=67))
+
+
+db.session.commit()

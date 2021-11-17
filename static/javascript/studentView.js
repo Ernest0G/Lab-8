@@ -32,24 +32,13 @@ function studentClasses(userid) {
         t += '<th>Time</th>';
         t += '<th>Students Enrolled</th>';
         t += '</tr>';
-
-
         for (i in scheduleParsed) {
             t += '<tr>';
             for (j in scheduleParsed[i]) {
                 t += '<td>' + scheduleParsed[i][j] + '</td>';
             }
-
-
-
-
             t += '</tr>';
         }
-
-
-
-
-
 
         t += '</table>'
         t += '</tbody>';

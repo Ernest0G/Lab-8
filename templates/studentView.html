@@ -15,7 +15,9 @@
             <div class="tabs">
                 <button class="tablinks" onclick="openTab('my-classes')">My Classes</button>
                 <button class="tablinks" onclick="openTab('offered-coures')">Offered Classes</button>
-                <button class="tablinks" onclick=" ">Log Out</button>
+                <form action ="{{url_for('logout')}}" method = 'GET'>
+                <button class="tablinks">Log Out</button>
+                </form>
             </div>
         </div>
 

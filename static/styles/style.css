@@ -23,8 +23,8 @@ html{
 
 .row {
     text-align: center;
-    margin-left: 5px;
     margin-bottom: 20px;
+    width: 100%;
   }
   
 .row:after {
@@ -32,3 +32,54 @@ html{
     display: table;
     clear: both;
 }
+
+.student-content{
+    width: 100%;
+    height: 100%;
+    align-content: center;
+    align-items: center;
+    position: absolute;
+
+}
+
+.tabs button{
+    float: center;
+    width: 20%;
+    height: 60px;
+    margin-top: 10px;
+    margin-right: 100px;
+    
+}
+
+.tabs button.active{
+    background-color: rgb(201, 199, 199);
+
+}
+
+
+
+.table-content{
+    display: none;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+th, td{
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid black;
+}
+
+table, th, td{
+    border:1px solid black
+}
+
+th {
+    background-color: rgb(134, 202, 247);
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}

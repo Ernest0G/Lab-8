@@ -1,5 +1,8 @@
 from server import Users, Students, Teachers, Classes, Enrollment, db
 
+db.drop_all()
+db.create_all() 
+
 #User Info
 Jose = Users(id = 1, username='JSantos', password='JSantos123')
 Betty = Users(id = 2,username='BBrown', password='BBrown123') 

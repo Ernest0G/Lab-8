@@ -13,7 +13,6 @@ Mindy = Users(id = 6,username='MNorris',password= 'MNorris123', userLevel=0)
 Aditya = Users(id = 7,username='ARanganath',password= 'ARanganath123', userLevel=0)
 Yi = Users(id = 8,username='YChen',password= 'YChen123', userLevel=0)
 
-Jose = Users(id = 1, username='JSantos', password='Jsantos123') 
 db.session.add(Jose) 
 db.session.add(Betty) 
 db.session.add(John) 

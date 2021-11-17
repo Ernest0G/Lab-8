@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request, render_template, redirect, url_for, s
 from flask_login.utils import login_required
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref, relationship
-from flask_login import current_user, login_user, LoginManager, UserMixin
+from flask_login import current_user, login_user, LoginManager, UserMixin, logout_user
 from flask_admin import Admin
 from sqlalchemy.sql.elements import Null
 
@@ -83,8 +83,12 @@ def index():
 
 @login_manager.user_loader
 def load_user(id):
-    return Users.(id)
+    return Users.query.get(id)
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 @app.route('/login', methods =['GET','POST'], endpoint='login')
 def Login():
@@ -100,7 +104,12 @@ def Login():
 
         if user is None:
             return redirect(url_for('login'))
+        
         user = user.first()
+        
+        if user is None:
+            return redirect(url_for('login'))
+
         if not user.checkPassword(request.form['password']):
             return redirect(url_for('login'))
 

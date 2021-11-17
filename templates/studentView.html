@@ -5,18 +5,19 @@
 
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
 
+
 </head>
 
 
-<body onload="studentClasses(5)" ; onload="offeredCourses(5)">
+<body onload="studentClasses({{userid}})" ; onload="offeredCourses({{userid}})">
 
     <div class="student-content">
         <div class="row">
             <div class="tabs">
                 <button class="tablinks" onclick="openTab('my-classes')">My Classes</button>
                 <button class="tablinks" onclick="openTab('offered-coures')">Offered Classes</button>
-                <form action ="{{url_for('logout')}}" method = 'GET'>
-                <button class="tablinks">Log Out</button>
+                <form action="{{url_for('logout')}}" method='GET'>
+                    <button class="tablinks">Log Out</button>
                 </form>
             </div>
         </div>
@@ -40,20 +41,6 @@
                         <td>Prof</td>
                         <td>MWF 3:40-4:50 PM</td>
                         <td>3/11</td>
-                        <td><button onclick="addCourse()">Add Course</button></td>
-                    </tr>
-                    <tr>
-                        <td>CSE 101</td>
-                        <td>Prof2</td>
-                        <td>MWF 2:40-4:50 PM</td>
-                        <td>6/12</td>
-                        <td><button onclick="addCourse()">Add Course</button></td>
-                    </tr>
-                    <tr>
-                        <td>CSE 31</td>
-                        <td>Prof3</td>
-                        <td>TR 3:40-4:50 PM</td>
-                        <td>5/11</td>
                         <td><button onclick="addCourse()">Add Course</button></td>
                     </tr>
 

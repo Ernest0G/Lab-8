@@ -101,7 +101,6 @@ def Login():
     if request.method == 'POST':
         print(request.form['username'])
         user = Users.query.filter_by(username = request.form['username'])
-
         if user is None:
             return redirect(url_for('login'))
         
@@ -115,14 +114,14 @@ def Login():
 
         login_user(user)
         print (user.userLevel)
-        return render_template('studentView.html')
+        return render_template('studentView.html',userid = user.id)
 
 @app.route('/index')
 def deez():
     print('bofa')
     return 'bofa'
 
-@app.route('/studentView/<userid>', methods = ['GET'],endpoint = 'studentView')
+@app.route('/studentView/myClasses/<userid>', methods = ['GET'],endpoint = 'studentView')
 def showStudentClasses(userid):
     classes = db.session.query(Classes.courseName, Teachers.name, Classes.time,Classes.numberEnrolled).filter(Enrollment.class_id == Classes.id,Classes.teacher_id == Teachers.id,Enrollment.student_id == Students.id,Students.user_id == Users.id,Users.id == userid).all()
     print(classes)

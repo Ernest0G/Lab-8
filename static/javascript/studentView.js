@@ -36,8 +36,11 @@ function studentClasses(userid) {
 
         for (i in scheduleParsed) {
             t += '<tr>';
+            for (j in scheduleParsed[i]) {
+                t += '<td>' + scheduleParsed[i][j] + '</td>';
+            }
 
-            t += '<td>' + scheduleParsed[i] + '</td>';
+
 
 
             t += '</tr>';

@@ -31,18 +31,18 @@ class Students(db.Model):
     name = db.Column(db.String, unique=False, nullable=False) 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),unique=True,nullable=False)
     
-    user = db.relationship('users',backref=db.backref('students',lazy=True ))
+    user = db.relationship('Users',backref=db.backref('student',lazy=True ))
 
     def __repr__(self): 
         return '<Students %r>' % self.name
 
 class Enrollment(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
-    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'),unique=True, nullable=False) 
-    classes = db.relationship('class',backref=db.backref('enrollment',lazy=True, ))
+    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'),unique=False, nullable=False) 
+    classes = db.relationship('Classes',backref=db.backref('enrollment',lazy=True, ))
     
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'),unique=False, nullable=False)
-    student = db.relationship('students',backref=db.backref('enrollment',lazy=True, ))
+    student = db.relationship('Students',backref=db.backref('enrollment',lazy=True, ))
     
     grade = db.Column(db.Integer, unique=False, nullable=True)
 
@@ -53,7 +53,7 @@ class Classes(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
     courseName = db.Column(db.String, unique=True, nullable=False) 
     teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=False, nullable=False)
-    teacher = db.relationship('teachers',backref=db.backref('Classes',lazy=True, ))
+    teacher = db.relationship('Teachers',backref=db.backref('class',lazy=True, ))
 
     numberEnrolled = db.Column(db.Integer, unique=False, nullable=False) 
     capacity = db.Column(db.Integer, unique=False, nullable=False)
@@ -64,7 +64,7 @@ class Teachers(db.Model):
     name = db.Column(db.String, unique=False, nullable=False) 
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),unique=True, nullable=False)
-    user = db.relationship('users',backref=db.backref('teachers',lazy=True ))
+    user = db.relationship('Users',backref=db.backref('teacher',lazy=True ))
 
 
 

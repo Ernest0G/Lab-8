@@ -9,3 +9,19 @@ function openTab(pageName) {
 
     document.getElementById(pageName).style.display = "block"
 }
+
+function studentClasses(userid) {
+    var xhttp = new XMLHttpRequest();
+    var url = "http://localhost:5000/studentView/" + userid;
+
+    xhttp.open("GET", url, true);
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+    xhttp.send();
+
+    xhttp.onload = function () {
+
+        alert('yo');
+
+    };
+
+}

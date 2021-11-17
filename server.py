@@ -41,15 +41,18 @@ class Enrollment(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'),unique=True, nullable=False) 
     classes = db.relationship('class',backref=db.backref('enrollment',lazy=True, ))
     
-    student_id = db.Column(db.Integer, db.ForeignKey('students.id'),unique=True, nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'),unique=False, nullable=False)
     student = db.relationship('students',backref=db.backref('enrollment',lazy=True, ))
     
     grade = db.Column(db.Integer, unique=False, nullable=True)
 
+    def __repr__(self): 
+        return '<Enrollment %r>' % self.class_id
+
 class Classes(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
     courseName = db.Column(db.String, unique=True, nullable=False) 
-    teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=True, nullable=False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=False, nullable=False)
     teacher = db.relationship('teachers',backref=db.backref('Classes',lazy=True, ))
 
     numberEnrolled = db.Column(db.Integer, unique=False, nullable=False) 
@@ -88,6 +91,12 @@ def login():
 @login_required
 def index():
     return render_template('index.html')
+
+@app.route('/studentView/<studentid>', methods = ['GET'],endpoint = 'studentView')
+def showStudentClasses(studentid):
+    classes = Enrollment.query.filter_by(id = studentid)
+    print(classes)
+    return classes
 
 
 if __name__ == '__main__':

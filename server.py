@@ -1,13 +1,14 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
+from flask_admin.base import AdminIndexView
 from flask_login.login_manager import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, LoginManager, current_user
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
-app.config['SECRET_KEY'] = 'mysecret'
+app.config['SECRET_KEY'] = 'verysecret'
 
 db = SQLAlchemy(app)
 login = LoginManager(app)
@@ -16,7 +17,6 @@ login = LoginManager(app)
 def load_user(user_id):
     return Users.query.get(user_id)
 
-
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String)
@@ -24,9 +24,15 @@ class Users(db.Model, UserMixin):
 class MyModelView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('/login'))
 
+class MyAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        if (current_user.)
+        return current_user.is_authenticated
 
-admin = Admin(app)
+admin = Admin(app, index_view = MyAdminIndexView())
 admin.add_view(MyModelView(Users, db.session))
 
 @app.route('/login')

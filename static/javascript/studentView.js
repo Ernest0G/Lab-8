@@ -8,6 +8,7 @@ function openTab(pageName) {
     }
 
     document.getElementById(pageName).style.display = "block"
+
 }
 
 function studentClasses(userid) {
@@ -20,8 +21,37 @@ function studentClasses(userid) {
 
     xhttp.onload = function () {
 
-        alert('yo');
+        let schedule = {};
+        schedule = this.responseText;
+        console.log(schedule);
+        let scheduleParsed = JSON.parse(schedule);
+
+        console.log(scheduleParsed);
+
+        let t = '<tbody>'
+        t += '<tr>';
+        t += '<th>Course Name</th>';
+        t += '<th>Teacher</th>';
+        t += '<th>Time</th>';
+        t += '<th>Students Enrolled</th>';
+        t += '</tr>';
+        for (item in scheduleParsed) {
+
+            console.log(item)
+
+        }
+        t += '<tr>';
+        t += '<td>' + key + '</td>';
+        t += '<td>' + value + '</td>';
+        t += '</tr>';
+        t += '</tbody>';
+        document.getElementById('my-classes').innerHTML = t;
+
 
     };
+
+}
+
+function addCourse(params) {
 
 }

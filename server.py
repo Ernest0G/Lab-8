@@ -1,4 +1,5 @@
 from enum import unique
+from html import entities
 from flask import Flask, jsonify, request, render_template, redirect, url_for, session
 from flask_login.utils import login_required
 from flask_sqlalchemy import SQLAlchemy
@@ -94,9 +95,10 @@ def index():
 
 @app.route('/studentView/<studentid>', methods = ['GET'],endpoint = 'studentView')
 def showStudentClasses(studentid):
-    classes = Enrollment.query.filter_by(id = studentid)
+    classes = db.session.query(Classes.courseName, Teachers.name, Classes.time,Classes.numberEnrolled).filter(Enrollment.class_id == Classes.id,Classes.teacher_id == Teachers.id,Enrollment.student_id == Students.id,Students.user_id == Users.id,Users.id == studentid).all()
+       
     print(classes)
-    return classes
+    return jsonify(classes)
 
 
 if __name__ == '__main__':

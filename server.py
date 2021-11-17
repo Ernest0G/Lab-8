@@ -39,6 +39,7 @@ class Students(db.Model):
 
 class Enrollment(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 
+
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'),unique=False, nullable=False) 
     classes = db.relationship('Classes',backref=db.backref('enrollment',lazy=True, ))
     
